@@ -9,7 +9,7 @@ Problema:
     >>> x = ['a','a','a','a','b','c','c','a','a','d','e','e','e','e']
     >>> ret = pack(x)
     >>> ret
-    >>> [['a','a','a','a'],['b'],['c','c'],['a','a'],['d'],['e','e','e','e']]
+    >>> [['a','a','a','a','a','a'],['b'],['c','c'],['d'],['e','e','e','e']]
     >>> x = ['a', 'b', 'c']
     >>> ret = pack(x)
     >>> ret 
@@ -25,12 +25,42 @@ Problema:
 
 import unittest
 
+def pack(l):
+    nl = {}
+    for elem in l:
+        if elem in nl:
+            nl[elem] += [elem]
+        else:
+            nl[elem] = [elem]
+    return [v for v in sorted(nl.values())]
+
 
 class Desafio1(unittest.TestCase):
 
+    def test_lista_simples(self):
+        self.assertEquals([], pack([]))
+
+    def test_lista_um_elemento(self):
+        self.assertEquals([[1]], pack([1]))
+
+    def test_lista_dois_elementos_diferentes(self):
+        self.assertEquals([[1], [2]], pack([1, 2]))
+
+    def test_lista_dois_elementos_iguais(self):
+        self.assertEquals([[1, 1]], pack([1, 1]))
+
+    def test_lista_dois_tipos_distintos(self):
+        self.assertEquals([[1, 1], [2, 2]], pack([1, 2, 1, 2]))
+
+    def test_lista_tres_tipos_distintos(self):
+        self.assertEquals([['a'], ['b'], ['c']], pack(['a', 'b', 'c']))
+
+    def test_lista_desordenada(self):
+        self.assertEquals([['a', 'a'], ['b', 'b'], ['c', 'c']], pack(['b','c', 'a', 'b', 'a', 'c']))
+
     def test_pack_duplicates(self):
         sampleList = ['a','a','a','a','b','c','c','a','a','d','e','e','e','e']
-        self.assertEqual([['a','a','a','a'],['b'],['c','c'],['a','a'],['d'],['e','e','e','e']],
+        self.assertEqual([['a','a','a','a','a','a'],['b'],['c','c'],['d'],['e','e','e','e']],
                     pack(sampleList))
 
 
